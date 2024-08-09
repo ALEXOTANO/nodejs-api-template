@@ -1,0 +1,51 @@
+	// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+	// README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
+	{
+		"name": "NODE-API",
+		"image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bullseye",
+		// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+		// "image": "mcr.microsoft.com/devcontainers/typescript-node:1-16-bookworm",
+		"customizations": {
+			"vscode": {
+				"extensions": [
+					"eamodio.gitlens",
+					"wmaurer.change-case",
+					"GitHub.vscode-pull-request-github",
+					"aaron-bond.better-comments",
+					"benjaminbenais.copilot-theme",
+					"ms-vscode-remote.remote-containers",
+					"mquandalle.graphql",
+					"GraphQL.vscode-graphql-syntax",
+					"xabikos.JavaScriptSnippets",
+					"chris-noring.node-snippets",
+					"ms-vscode-remote.remote-ssh",
+					"ms-vscode-remote.remote-ssh-edit",
+					"ms-vscode.remote-server",
+					"ms-vscode-remote.vscode-remote-extensionpack",
+					"ms-vscode.remote-explorer",
+					"wayou.vscode-todo-highlight",
+					"ms-vscode.vscode-speech",
+					"vscode-icons-team.vscode-icons",
+					"vivaxy.vscode-conventional-commits",
+					"github.vscode-github-actions",
+					"GitHub.copilot",
+					"GitHub.copilot-chat",
+					"GraphQL.vscode-graphql-execution",
+					"GraphQL.vscode-graphql",
+					"ms-vscode.vscode-typescript-next",
+					"ms-azuretools.vscode-docker",
+					"esbenp.prettier-vscode"
+				]
+			}
+		},
+		"features": {
+			"ghcr.io/devcontainers-contrib/features/ts-node:1": {},
+			"ghcr.io/dhoeric/features/google-cloud-cli:1": {},
+			"ghcr.io/joshuanianji/devcontainer-features/gcloud-cli-persistence:1": {}
+		},
+		"remoteUser": "root",
+		"postStartCommand": [
+			"git config --global core.autocrlf true",
+			"npm i"
+		]
+	}

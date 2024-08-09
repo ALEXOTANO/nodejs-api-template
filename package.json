@@ -1,0 +1,56 @@
+{
+    "name": "functions",
+    "scripts": {
+        "codegen": "graphql-codegen --config ./src/codegen.ts && npm run copy-assets",
+        "serve": "LOCAL=true tsx watch --inspect src/index.ts",
+        "build": "rm -rf lib/ && tsc && npm run codegen",
+        "copy-assets": "mkdir -p lib/graphQL && mkdir -p lib/assets && rm -f lib/graphQL/* && copyfiles -u 1 src/**/*.graphql src/**/*.json lib"
+    },
+    "engines": {
+        "node": "18"
+    },
+    "main": "lib/index.js",
+    "dependencies": {
+        "@apollo/server": "^4.9.5",
+        "@apollo/subgraph": "^2.5.7",
+        "axios": "^1.6.2",
+        "busboy": "^1.6.0",
+        "compression": "1.7.4",
+        "cors": "^2.8.5",
+        "dotenv": "^16.3.1",
+        "firebase-admin": "^11.11.0",
+        "firebase-functions": "^4.6.0",
+        "graphql": "16.8.1",
+        "graphql-scalars": "1.23.0",
+        "graphql-tag": "2.12.6",
+        "helmet": "7.1.0",
+        "jsonwebtoken": "^9.0.2",
+        "luxon": "3.4.4",
+        "underscore": "^1.13.6"
+    },
+    "devDependencies": {
+        "@google-cloud/functions-framework": "^3.3.0",
+        "@graphql-codegen/add": "5.0.2",
+        "@graphql-codegen/cli": "5.0.2",
+        "@graphql-codegen/typescript": "4.0.6",
+        "@graphql-codegen/typescript-resolvers": "4.0.6",
+        "@types/busboy": "^1.5.0",
+        "@types/compression": "1.7.5",
+        "@types/cors": "^2.8.12",
+        "@types/express-fileupload": "^1.2.2",
+        "@types/express-serve-static-core": "^4.17.33",
+        "@types/jsonwebtoken": "^8.5.8",
+        "@types/luxon": "^3.3.8",
+        "@types/minimist": "^1.2.5",
+        "@types/node": "20.14.13",
+        "@types/nodemailer": "6.4.15",
+        "@types/underscore": "^1.11.15",
+        "copyfiles": "^2.4.1",
+        "firebase-functions-test": "^0.2.0",
+        "firebase-tools": "12.9.1",
+        "minimist": "^1.2.8",
+        "tsx": "4.11.0",
+        "typescript": "^5.2.2"
+    },
+    "private": true
+}
