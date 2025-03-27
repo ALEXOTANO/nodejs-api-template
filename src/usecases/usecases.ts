@@ -5,8 +5,8 @@ import { UsersUsecase } from './user.usecase';
 
 export const Usecases = (repos: ReturnType<typeof Repos>) => {
     return {
-        auth: AuthUsecase(repos.auth, repos.user),
-        mock: UsersUsecase(repos.user),
-        healthCheckUsecase: HealthCheckUsecase(),
+        auth: new AuthUsecase(repos.auth, repos.user),
+        mock: new UsersUsecase(repos.user),
+        healthCheckUsecase: new HealthCheckUsecase(),
     };
 };

@@ -3,8 +3,14 @@ import * as jwt from 'jsonwebtoken';
 import { logError } from '../errors/error';
 import { FirebaseService } from '../services/firebase.service';
 
-export const AuthRepo = (firebase: typeof FirebaseService) => {
-    const generateToken = (userId: string, userType: string): Promise<string> => {
+export class AuthRepo {
+    private firebase: typeof FirebaseService;
+
+    constructor(firebase: typeof FirebaseService) {
+        this.firebase = firebase;
+    }
+
+    generateToken(userId: string, userType: string): Promise<string> {
         const dataToStore = {
             userId,
             userRole: userType,
@@ -18,11 +24,11 @@ export const AuthRepo = (firebase: typeof FirebaseService) => {
                 res(token);
             });
         });
-    };
+    }
 
-    const getByFirebaseId = async (firebaseId: string): Promise<Partial<auth.UserRecord>> => {
+    async getByFirebaseId(firebaseId: string): Promise<Partial<auth.UserRecord>> {
         try {
-            const userRecord = await firebase.appAuth.getUser(firebaseId);
+            const userRecord = await this.firebase.appAuth.getUser(firebaseId);
             if (!userRecord) {
                 throw new Error('User not found,');
             }
@@ -31,10 +37,5 @@ export const AuthRepo = (firebase: typeof FirebaseService) => {
             logError(error);
             throw error;
         }
-    };
-
-    return {
-        generateToken,
-        getByFirebaseId,
-    };
-};
+    }
+}

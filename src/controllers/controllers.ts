@@ -4,7 +4,7 @@ import { HealthCheckController } from './healthcheck.controller';
 
 export const Controllers = (usecase: ReturnType<typeof Usecases>) => {
     return {
-        auth: AuthController(usecase.auth),
-        healthCheck: HealthCheckController(usecase.healthCheckUsecase),
+        auth: new AuthController(usecase.auth),
+        healthCheck: new HealthCheckController(usecase.healthCheckUsecase),
     };
 };

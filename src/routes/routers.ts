@@ -1,6 +1,7 @@
 import { Controllers } from '../controllers/controllers';
 import { ApolloServer } from '../init/apolloServer';
 import { Middlewares } from '../middlewares/middlewares';
+import { AuthRouter } from './auth.router';
 import { GraphqlRouter } from './graphQL.router';
 import { HealthCheckRouter } from './healthcheck.router';
 
@@ -9,5 +10,9 @@ export const Routes = (
     middlewares: ReturnType<typeof Middlewares>,
     apolloServer: Awaited<ReturnType<typeof ApolloServer>>
 ) => {
-    return [GraphqlRouter(apolloServer, middlewares.authMiddlewares), HealthCheckRouter(controllers.healthCheck)];
+    return [
+        GraphqlRouter(apolloServer, middlewares.authMiddlewares),
+        HealthCheckRouter(controllers.healthCheck),
+        AuthRouter(controllers.auth, middlewares.authMiddlewares),
+    ];
 };

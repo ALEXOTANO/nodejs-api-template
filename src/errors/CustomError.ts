@@ -1,11 +1,11 @@
 import { Response } from 'express';
 import { GraphQLErrorExtensions } from 'graphql';
-import { CustomErrorCode } from '../types/autogen/types';
+
 import { logError } from './error';
 
 export class CustomError extends Error {
     name = 'CustomError';
-    customCode: CustomErrorCode = null;
+    customCode: string = null;
     message = '';
     messageDetail = '';
     httpResponse: Response = null;

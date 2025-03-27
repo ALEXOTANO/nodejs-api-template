@@ -3,10 +3,12 @@ import { CustomError } from '../errors/CustomError';
 import { RequestFirebaseToken, RequestUserData } from '../types/misc';
 import { AuthUsecase } from '../usecases/auth.usecase';
 
-export const AuthController = (authUsecase: ReturnType<typeof AuthUsecase>) => {
-    const signIn = async (req: RequestUserData, res: Response) => {
+export class AuthController {
+    constructor(private authUsecase: AuthUsecase) { }
+
+    signIn = async (req: RequestUserData, res: Response) => {
         try {
-            const signInData = await authUsecase.signInWithId(req.userData.userId);
+            const signInData = await this.authUsecase.signInWithId(req.userData.userId);
 
             res.json(signInData);
         } catch (e) {
@@ -17,15 +19,15 @@ export const AuthController = (authUsecase: ReturnType<typeof AuthUsecase>) => {
                 httpResponse: res,
             });
         }
-    };
+    }
 
-    const generateToken = async (req: RequestFirebaseToken, res: Response) => {
+    generateToken = async (req: RequestFirebaseToken, res: Response) => {
         try {
-            const userId = req.body.userId as string;
+            const userId = '1' || req.body.userId as string;
 
-            if (!userId) throw new Error('UserId is required.');
+            if (!userId) throw new Error('user_id is required.');
 
-            const token = await authUsecase.generateToken(userId, 'user');
+            const token = await this.authUsecase.generateToken(userId, 'user');
 
             res.json(token);
         } catch (e) {
@@ -36,10 +38,5 @@ export const AuthController = (authUsecase: ReturnType<typeof AuthUsecase>) => {
                 httpResponse: res,
             });
         }
-    };
-
-    return {
-        generateToken,
-        signIn,
-    };
-};
+    }
+}

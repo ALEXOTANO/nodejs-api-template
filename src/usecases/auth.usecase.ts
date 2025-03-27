@@ -1,26 +1,26 @@
 import { AuthRepo } from '../repositories/auth.repo';
 import { UserRepo } from '../repositories/users.repo';
 
-export const AuthUsecase = (authRepo: ReturnType<typeof AuthRepo>, userRepo: ReturnType<typeof UserRepo>) => {
-    const signInWithId = async (userId: string) => {
-        const user = await userRepo.getById(userId);
+export class AuthUsecase {
+    constructor(
+        private authRepo: AuthRepo,
+        private userRepo: UserRepo
+    ) { }
+
+    async signInWithId(userId: string) {
+        const user = await this.userRepo.getById(userId);
 
         if (!user) throw new Error('User not found.');
 
-        const token = await authRepo.generateToken(user.id, user.userType);
+        const token = await this.authRepo.generateToken(user.id, user.userType);
 
         return {
             user,
             token,
         };
-    };
+    }
 
-    const generateToken = async (userId: string, userType: string): Promise<string> => {
-        return authRepo.generateToken(userId, userType);
-    };
-
-    return {
-        generateToken,
-        signInWithId,
-    };
-};
+    async generateToken(userId: string, userType: string) {
+        return this.authRepo.generateToken(userId, userType);
+    }
+}

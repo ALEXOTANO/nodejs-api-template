@@ -3,10 +3,12 @@ import { CustomError } from '../errors/CustomError';
 import { RequestUserData } from '../types/misc';
 import { HealthCheckUsecase } from '../usecases/healthcheck.usecase';
 
-export const HealthCheckController = (healthcheck: ReturnType<typeof HealthCheckUsecase>) => {
-    const liveness = async (req: RequestUserData, res: Response) => {
+export class HealthCheckController {
+    constructor(private healthcheck: HealthCheckUsecase) { }
+
+    liveness = async (req: RequestUserData, res: Response) => {
         try {
-            const status = await healthcheck.liveness();
+            const status = await this.healthcheck?.liveness();
             if (status.status === 'DOWN') {
                 console.error(JSON.stringify(status));
                 res.status(500).send(status);
@@ -21,9 +23,5 @@ export const HealthCheckController = (healthcheck: ReturnType<typeof HealthCheck
                 httpResponse: res,
             });
         }
-    };
-
-    return {
-        liveness,
-    };
-};
+    }
+}

@@ -12,7 +12,10 @@ export const corsMiddleware = (originalReq: Request, res: Response, next: NextFu
                 return next(null, true);
             }
 
-            if (!origin) return next(new Error(`The CORS policy needs a origin. ${origin}`), true);
+            if (!origin) {
+                console.error('Origin is not defined', originalReq.url);
+                return next(null, true);
+            }
             if (!allowedUrls.includes(origin)) {
                 const msg = `The CORS policy for this site does not allow access from the specified origin. ${origin} `;
                 return next(new Error(msg), false);

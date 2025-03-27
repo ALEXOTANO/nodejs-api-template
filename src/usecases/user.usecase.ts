@@ -1,21 +1,20 @@
 import { UserRepo } from '../repositories/users.repo';
 import { User } from '../types/autogen/types';
 
-export const UsersUsecase = (userRepo: ReturnType<typeof UserRepo>) => {
-    const getUsers = async () => {
-        return userRepo.get();
-    };
-    const getById = async (id: string) => {
-        return userRepo.getById(id);
-    };
+export class UsersUsecase {
+    constructor(
+        private userRepo: ReturnType<typeof UserRepo>
+    ) { }
 
-    const create = async (contact: User) => {
-        return userRepo.create(contact);
-    };
+    async getUsers() {
+        return this.userRepo.get();
+    }
 
-    return {
-        getUsers,
-        getById,
-        create,
-    };
-};
+    async getById(id: string) {
+        return this.userRepo.getById(id);
+    }
+
+    async create(contact: User) {
+        return this.userRepo.create(contact);
+    }
+}

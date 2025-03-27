@@ -4,8 +4,8 @@ import { UserRepo } from './users.repo';
 
 export const Repos = (services: typeof Services) => {
     const Repos = {
-        auth: AuthRepo(services.firebaseService),
-        user: UserRepo(),
+        auth: new AuthRepo(services.firebaseService),
+        user: new UserRepo(),
     };
 
     return Repos;
