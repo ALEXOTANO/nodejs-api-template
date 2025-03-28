@@ -23,7 +23,7 @@ export class AuthController {
 
     generateToken = async (req: RequestFirebaseToken, res: Response) => {
         try {
-            const userId = '1' || req.body.userId as string;
+            const userId = req.body.userId as string;
 
             if (!userId) throw new Error('user_id is required.');
 
