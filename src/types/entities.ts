@@ -1,17 +1,17 @@
-export interface BaseEntity {
+export class BaseEntity {
     id: string;
     created_at: Date;
     deleted_at?: Date;
     updated_at: Date;
 }
 
-export interface Company extends BaseEntity {
+export class Company extends BaseEntity {
     name: string;
     plan: string;
     expires_at: Date;
 }
 
-export interface Contact extends BaseEntity {
+export class Contact extends BaseEntity {
     first_name: string;
     last_name: string;
     company_name?: string;
@@ -25,16 +25,23 @@ export interface Contact extends BaseEntity {
     company_id: string;
 }
 
-export interface Conversation extends BaseEntity {
+export class Conversation extends BaseEntity {
     session_id: string;
     message: string;
     contact_id: string;
     company_id: string;
 }
 
-export interface User extends BaseEntity {
+export class User extends BaseEntity {
+    company_id: string;
     name: string;
     email: string;
     phone: string;
+    role: UserRole;
     isActive: boolean;
+}
+
+export enum UserRole {
+    admin = 'admin',
+    user = 'user'
 }

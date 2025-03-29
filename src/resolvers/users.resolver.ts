@@ -1,7 +1,7 @@
 import { Resolvers } from '../types/autogen/types';
 import { UsersUsecase } from '../usecases/user.usecase';
 
-export const UsersResolver = (usersUsecase: ReturnType<typeof UsersUsecase>) => {
+export const UsersResolver = (usersUsecase: UsersUsecase) => {
     const resolver: Resolvers = {
         Query: {
             getUsers(_, _args) {

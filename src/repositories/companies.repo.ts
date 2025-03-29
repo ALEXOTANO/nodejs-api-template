@@ -1,6 +1,6 @@
+import crypto from 'crypto';
 import { PostgresService } from '../services/postgres.service';
 import { Company } from '../types/entities';
-
 export class CompanyRepo {
     constructor(private db: PostgresService) { }
 
@@ -16,18 +16,42 @@ export class CompanyRepo {
         return result.rows[0] || null;
     }
 
-    async create(company: Omit<Company, 'id' | 'created_at' | 'updated_at' | 'deleted_at'>): Promise<Company> {
+    async create(company: Partial<Company>): Promise<Company> {
+
+        // Check if company already has an ID
+        if (company.id) {
+            throw new Error('Company ID should not be provided during creation.');
+        }
+        company.created_at = new Date();
+        company.updated_at = new Date();
+        company.deleted_at = null;
+        company.id = crypto.randomUUID();
+
+        // check that the company doens't have properties that are not in the Company interface
+        const allowedFields = Object.keys(new Company());
+        const invalidFields = Object.keys(company).filter(field => !allowedFields.includes(field));
+        if (invalidFields.length > 0) {
+            throw new Error(`Invalid fields: ${invalidFields.join(', ')}`);
+        }
+
+
+
+        // Get all field names and values
+        const fields = Object.keys(company);
+        const values = Object.values(company);
+
+        // Create parameterized query with $1, $2, etc.
+        const placeholders = fields.map((_, i) => `$${i + 1}`).join(', ');
+        const columnNames = fields.join(', ');
+
+        // Insert query that returns the created record
         const query = `
-      INSERT INTO companies (name, plan, expires_at)
-      VALUES ($1, $2, $3)
-      RETURNING *
-    `;
-        const result = await this.db.query<Company>(query, [
-            company.name,
-            company.plan,
-            company.expires_at
-        ]);
-        return result.rows[0];
+             INSERT INTO users (${columnNames}) 
+             VALUES (${placeholders})
+             RETURNING *
+         `;
+        const result = await this.db.query<Company>(query, values);
+        return result.rows[0] as Company;
     }
 
     async update(id: string, company: Partial<Omit<Company, 'id' | 'created_at' | 'updated_at' | 'deleted_at'>>): Promise<Company | null> {

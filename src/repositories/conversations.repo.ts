@@ -17,6 +17,7 @@ export class ConversationRepo {
     }
 
     async create(conversation: Omit<Conversation, 'id' | 'created_at' | 'updated_at' | 'deleted_at'>): Promise<Conversation> {
+        // Get all field names and values
         const query = `
       INSERT INTO conversations (session_id, message, contact_id, company_id)
       VALUES ($1, $2, $3, $4)

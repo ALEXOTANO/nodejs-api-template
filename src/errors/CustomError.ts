@@ -37,13 +37,13 @@ export class CustomError extends Error {
                 message: this.message,
                 messageDetail: this.messageDetail,
                 extensions: this.extensions,
-            });
+            })
         }
 
         if (args.httpResponse) {
             args.httpResponse
                 .status(args.httpResponseCode)
-                .json({ message: this.message, messageDetail: args.messageDetail, code: this.customCode });
+                .json({ message: this.message, messageDetail: this.messageDetail, code: this.customCode });
         }
     }
 }

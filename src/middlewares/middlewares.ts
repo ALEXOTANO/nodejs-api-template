@@ -4,5 +4,5 @@ import { filesUpload } from './fileupload.middleware';
 
 export const Middlewares = (services: typeof Services) => ({
     filesUpload,
-    authMiddlewares: AuthMiddlewares(services.firebaseService),
+    authMiddlewares: AuthMiddlewares(services.firebaseService, services.SupabaseService),
 });

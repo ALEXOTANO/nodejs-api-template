@@ -2,6 +2,7 @@ import { Response } from 'express';
 import { CustomError } from '../errors/CustomError';
 import { RequestFirebaseToken, RequestUserData } from '../types/misc';
 import { AuthUsecase } from '../usecases/auth.usecase';
+import { User } from '../types/entities';
 
 export class AuthController {
     constructor(private authUsecase: AuthUsecase) { }
@@ -33,6 +34,27 @@ export class AuthController {
         } catch (e) {
             throw new CustomError({
                 message: 'AuthController:generateToken.',
+                error: e,
+                httpResponseCode: 400,
+                httpResponse: res,
+            });
+        }
+    }
+
+    createUser = async (req: RequestUserData, res: Response) => {
+        try {
+            const userData = req.body as Partial<User>;
+
+            if (!userData.email || !userData.name) {
+                throw new Error('Email and name are required fields.');
+            }
+
+            const newUser = await this.authUsecase.createUser(userData);
+
+            res.status(201).json(newUser);
+        } catch (e) {
+            throw new CustomError({
+                message: 'AuthController:createUser.',
                 error: e,
                 httpResponseCode: 400,
                 httpResponse: res,

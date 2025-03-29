@@ -2,10 +2,16 @@ import compression from 'compression';
 import 'dotenv/config';
 import express from 'express';
 import helmet from 'helmet';
+import { Settings } from 'luxon';
 import { corsMiddleware } from './cors';
 import { initModules } from './init';
 
 export const api = express();
+
+Settings.defaultZone = 'America/Mexico_City';
+Settings.defaultLocale = 'es-MX';
+Settings.defaultNumberingSystem = 'latn';
+
 
 api.use(helmet());
 api.use(compression());

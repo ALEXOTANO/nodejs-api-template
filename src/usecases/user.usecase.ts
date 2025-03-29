@@ -3,7 +3,7 @@ import { User } from '../types/autogen/types';
 
 export class UsersUsecase {
     constructor(
-        private userRepo: ReturnType<typeof UserRepo>
+        private userRepo: UserRepo
     ) { }
 
     async getUsers() {

@@ -1,19 +1,15 @@
-import { createClient } from '@supabase/supabase-js';
 import 'dotenv/config';
 import { NextFunction, Request, Response } from 'express';
 import * as JWT from 'jsonwebtoken';
 import { CustomError } from '../errors/CustomError';
 import { FirebaseService as fb } from '../services/firebase.service';
+import { SupabaseService } from '../services/supabase.service';
 import { UserData } from '../types/misc';
 import { CustomResponse } from '../utils/response.util';
 
-const supabaseClient = createClient(
-    process.env.SUPABASE_URL as string,
-    process.env.SUPABASE_ANON_KEY as string
-);
 
 
-export const AuthMiddlewares = (firebaseService: typeof fb) => {
+export const AuthMiddlewares = (firebaseService: typeof fb, supabaseService: typeof SupabaseService) => {
     const checkToken = (req: Request, res: Response, next: NextFunction) => {
         try {
             let token = req.headers['authorization'];
@@ -43,15 +39,14 @@ export const AuthMiddlewares = (firebaseService: typeof fb) => {
 
     const checkSupabaseToken = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const supabaseToken = req.headers['supabaseToken'] as string;
+            const supabaseToken = req.headers['supabasetoken'] as string;
             if (!supabaseToken) {
                 res.status(401).json(
                     new CustomResponse('Missing Token: request has to include a header supabasetoken', '', null)
                 );
                 return;
             }
-            console.log('supabaseToken', supabaseToken);
-            const supabaseUser = await supabaseClient.auth.getUser(supabaseToken.replace('Bearer ', ''));
+            const supabaseUser = await supabaseService.auth.getUser(supabaseToken.replace('Bearer ', ''));
             if (!supabaseUser) {
                 res.status(401).json(new CustomResponse('Invalid supabasetoken', '', null));
                 return;

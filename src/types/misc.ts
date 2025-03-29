@@ -18,3 +18,10 @@ export interface UserData {
 }
 
 export type TimestampOrString = Timestamp | string | Date;
+
+export enum plans {
+    free = 'free',
+    standard = 'standard',
+    premium = 'premium',
+    professional = 'professional',
+}

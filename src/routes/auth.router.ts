@@ -12,7 +12,8 @@ export const AuthRouter = (
     // Route for generating token (login)
     router.post('/v1/login', [authMiddleware.checkSupabaseToken], asyncErrorHandler(authController.signIn));
 
-
+    // Route for creating new users
+    router.post('/v1/users', asyncErrorHandler(authController.createUser));
 
     return router;
 };

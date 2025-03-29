@@ -9,7 +9,7 @@ export const Repositories = (services: typeof Services) => {
     return {
 
         authRepo: new AuthRepo(services.postgresService),
-        userRepo: new UserRepo(services.postgresService),
+        userRepo: new UserRepo(services.postgresService, services.SupabaseService),
         companyRepo: new CompanyRepo(services.postgresService),
         contactRepo: new ContactRepo(services.postgresService),
         conversationRepo: new ConversationRepo(services.postgresService),
