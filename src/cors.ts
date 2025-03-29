@@ -1,7 +1,7 @@
 import cors from 'cors';
 import { NextFunction, Request, Response } from 'express';
 
-const allowedUrls = ['http://localhost:3000'];
+const allowedUrls = ['http://localhost:5173'];
 
 const whitelistedEndpoints = ['/healthcheck/'];
 

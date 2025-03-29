@@ -8,7 +8,7 @@ export class AuthController {
 
     signIn = async (req: RequestUserData, res: Response) => {
         try {
-            const signInData = await this.authUsecase.signInWithId(req.userData.userId);
+            const signInData = await this.authUsecase.signInWithId(req.userData.id);
 
             res.json(signInData);
         } catch (e) {

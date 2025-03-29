@@ -10,10 +10,9 @@ export const AuthRouter = (
     const router = Router();
 
     // Route for generating token (login)
-    router.post('/v1/login', asyncErrorHandler(authController.generateToken));
+    router.post('/v1/login', [authMiddleware.checkSupabaseToken], asyncErrorHandler(authController.signIn));
 
-    // Route for retrieving user data after authentication
-    router.get('/v1/me', authMiddleware.checkToken, asyncErrorHandler(authController.signIn));
+
 
     return router;
 };

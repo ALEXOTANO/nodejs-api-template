@@ -31,3 +31,10 @@ export interface Conversation extends BaseEntity {
     contact_id: string;
     company_id: string;
 }
+
+export interface User extends BaseEntity {
+    name: string;
+    email: string;
+    phone: string;
+    isActive: boolean;
+}
