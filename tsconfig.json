@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "CommonJS",
+    "moduleResolution": "node",
     "target": "es2020",
     "noImplicitReturns": true,
     "outDir": "lib",
     "sourceMap": true,
-    "moduleResolution": "node",
     "strict": false,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
@@ -30,7 +30,8 @@
     "node_modules",
     "**/*.spec.ts",
     "**/*.test.ts",
-    "lib"
+    "lib",
+    "src/scripts/**/*.ts"
   ],
   "compileOnSave": true
 }

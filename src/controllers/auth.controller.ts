@@ -1,8 +1,8 @@
 import { Response } from 'express';
 import { CustomError } from '../errors/CustomError';
+import { User } from '../types/entities';
 import { RequestFirebaseToken, RequestUserData } from '../types/misc';
 import { AuthUsecase } from '../usecases/auth.usecase';
-import { User } from '../types/entities';
 
 export class AuthController {
     constructor(private authUsecase: AuthUsecase) { }
@@ -44,6 +44,7 @@ export class AuthController {
     createUser = async (req: RequestUserData, res: Response) => {
         try {
             const userData = req.body as Partial<User>;
+            console.log('userData', userData)
 
             if (!userData.email || !userData.name) {
                 throw new Error('Email and name are required fields.');

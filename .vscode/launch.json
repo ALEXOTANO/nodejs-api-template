@@ -5,13 +5,25 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Attach by Process ID",
+      "processId": "${command:PickProcess}",
+      "request": "attach",
+      "outFiles": [
+        "${workspaceFolder}/lib/**/*.js"
+      ],
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "node"
+    },
+    {
       "type": "node",
       "request": "attach",
       "name": "Attach to Server",
       "address": "localhost",
       "port": 9229,
-      "localRoot": "${workspaceFolder}",
-      "remoteRoot": "${workspaceFolder}",
+      "localRoot": "${workspaceFolder}/src",
+      "remoteRoot": "${workspaceFolder}/src",
       "restart": {
         //? Try to reconnect debugger every 2s.
         "delay": 2000,

@@ -1,9 +1,23 @@
 {
-  "dotenv.enableAutocloaking": false,
+  "git.ignoreLimitWarning": true,
+  "editor.wordWrapColumn": 120,
+  "editor.wordWrap": "wordWrapColumn",
+  "editor.autoIndent": "full",
+  "prettier.requireConfig": true,
+  "prettier.semi": false,
   "editor.codeActionsOnSave": {
-    "source.organizeImports": "explicit",
-    "source.fixAll.eslint": "always"
+    "source.fixAll": "explicit",
+    "source.organizeImports": "explicit"
   },
-  "editor.tabSize": 4,
-  "editor.formatOnSave": true
+  "editor.defaultFormatter": "GitHub.copilot",
+  "terminal.integrated.cwd": "${workspaceFolder}",
+  "editor.formatOnPaste": false,
+  "editor.formatOnSave": true,
+  "eslint.run": "onSave",
+  "emmet.triggerExpansionOnTab": true,
+  "files.insertFinalNewline": true,
+  "typescript.tsdk": "./node_modules/typescript/lib",
+  "files.associations": {
+    "*.env*": "env"
+  }
 }

@@ -1,7 +1,8 @@
 import 'dotenv/config';
 import * as adminFB from 'firebase-admin';
 import { CollectionReference } from 'firebase-admin/firestore';
-import { User } from '../types/autogen/types';
+import { User } from '../types/entities';
+
 
 const serviceAccountApp = require(`../../key.json`);
 if (!serviceAccountApp?.project_id) {

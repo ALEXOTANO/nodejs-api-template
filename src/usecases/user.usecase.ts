@@ -1,5 +1,6 @@
 import { UserRepo } from '../repositories/users.repo';
-import { User } from '../types/autogen/types';
+import { User } from '../types/entities';
+
 
 export class UsersUsecase {
     constructor(
