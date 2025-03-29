@@ -5,13 +5,13 @@ import { ContactRepo } from './contacts.repo';
 import { ConversationRepo } from './conversations.repo';
 import { UserRepo } from './users.repo';
 
-export const Repos = (services: typeof Services) => {
-    const Repos = {
-        auth: new AuthRepo(services.firebaseService),
-        user: new UserRepo(),
-        company: new CompanyRepo(services.postgresService),
-        contact: new ContactRepo(services.postgresService),
-        conversation: new ConversationRepo(services.postgresService)
-    };
-    return Repos;
-};
+export const Repositories = (services: typeof Services) => {
+    return {
+
+        authRepo: new AuthRepo(services.postgresService),
+        userRepo: new UserRepo(services.postgresService),
+        companyRepo: new CompanyRepo(services.postgresService),
+        contactRepo: new ContactRepo(services.postgresService),
+        conversationRepo: new ConversationRepo(services.postgresService),
+    }
+}

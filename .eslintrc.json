@@ -3,7 +3,9 @@
     "browser": true,
     "es2021": true
   },
-  "extends": ["plugin:prettier/recommended"],
+  "extends": [
+    "plugin:prettier/recommended"
+  ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 11,
@@ -12,18 +14,28 @@
   },
   "settings": {
     "import/parsers": {
-      "@typescript-eslint/parser": [".ts"]
+      "@typescript-eslint/parser": [
+        ".ts"
+      ]
     },
     "import/resolver": {
       "node": {
-        "extensions": [".ts"],
-        "moduleDirectory": ["node_modules", "src/"]
+        "extensions": [
+          ".ts"
+        ],
+        "moduleDirectory": [
+          "node_modules",
+          "src/"
+        ]
       },
       "typescript": {
         "alwaysTryTypes": true
       }
     }
   },
+  "plugins": [
+    "unused-imports"
+  ],
   "rules": {
     "prettier/prettier": "off",
     "import/no-unresolved": "off",
@@ -34,7 +46,14 @@
           "caseInsensitive": true,
           "order": "asc"
         },
-        "groups": ["builtin", "index", "external", "parent", "sibling", "internal"],
+        "groups": [
+          "builtin",
+          "index",
+          "external",
+          "parent",
+          "sibling",
+          "internal"
+        ],
         "pathGroups": [
           {
             "pattern": "@app/**",
@@ -59,12 +78,34 @@
     "typescript-eslint/no-unused-vars": "off",
     "import/no-extraneous-dependencies": "off",
     "indent": "off",
-    "@typescript-eslint/indent": [0],
+    "@typescript-eslint/indent": [
+      0
+    ],
     "no-use-before-define": "off",
-    "@typescript-eslint/no-use-before-define": ["off"],
-    "@typescript-eslint/no-unused-vars": ["off"],
-    "@typescript-eslint/no-shadow": ["off"],
-    "@typescript-eslint/dot-notation": ["off"],
-    "@typescript-eslint/naming-convention": ["off"]
+    "@typescript-eslint/no-use-before-define": [
+      "off"
+    ],
+    "@typescript-eslint/no-unused-vars": [
+      "off"
+    ],
+    "@typescript-eslint/no-shadow": [
+      "off"
+    ],
+    "@typescript-eslint/dot-notation": [
+      "off"
+    ],
+    "@typescript-eslint/naming-convention": [
+      "off"
+    ],
+    "unused-imports/no-unused-imports": "error",
+    "unused-imports/no-unused-vars": [
+      "warn",
+      {
+        "vars": "all",
+        "varsIgnorePattern": "^_",
+        "args": "after-used",
+        "argsIgnorePattern": "^_"
+      }
+    ]
   }
 }

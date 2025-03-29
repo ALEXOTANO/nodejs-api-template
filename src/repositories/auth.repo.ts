@@ -1,14 +1,11 @@
-import { auth } from 'firebase-admin';
 import * as jwt from 'jsonwebtoken';
 import { logError } from '../errors/error';
-import { FirebaseService } from '../services/firebase.service';
+import { PostgresService } from '../services/postgres.service';
 
 export class AuthRepo {
-    private firebase: typeof FirebaseService;
-
-    constructor(firebase: typeof FirebaseService) {
-        this.firebase = firebase;
-    }
+    constructor(
+        private pg: PostgresService
+    ) { }
 
     generateToken(userId: string, userType: string): Promise<string> {
         const dataToStore = {
@@ -26,13 +23,17 @@ export class AuthRepo {
         });
     }
 
-    async getByFirebaseId(firebaseId: string): Promise<Partial<auth.UserRecord>> {
+    async getByFirebaseId(userId: string): Promise<any> {
         try {
-            const userRecord = await this.firebase.appAuth.getUser(firebaseId);
-            if (!userRecord) {
-                throw new Error('User not found,');
+            const query = 'SELECT * FROM users WHERE user_id = $1';
+            const params = [userId];
+            const result = await this.pg.query(query, params);
+
+            if (!result || result.rows.length === 0) {
+                throw new Error('User not found');
             }
-            return userRecord;
+
+            return result.rows[0];
         } catch (error) {
             logError(error);
             throw error;
