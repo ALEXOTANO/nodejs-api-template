@@ -38,7 +38,7 @@ export class User extends BaseEntity {
     email: string;
     phone: string;
     role: UserRole;
-    isActive: boolean;
+    is_active: boolean;
 }
 
 export enum UserRole {

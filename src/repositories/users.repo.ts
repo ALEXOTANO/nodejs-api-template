@@ -1,8 +1,7 @@
+import { CustomError } from '../errors/CustomError';
 import { PostgresService } from '../services/postgres.service';
 import { SupabaseService } from '../services/supabase.service';
 import { User } from '../types/entities';
-
-
 
 export class UserRepo {
 
@@ -26,41 +25,66 @@ export class UserRepo {
 
     async create(user: Partial<User & { password: string }>): Promise<User> {
         // Check if user already exists
-        const existingUser = await this.getById(user.id);
-        if (existingUser) {
-            throw new Error('User already exists');
+        if (user.id) {
+            throw new Error('User ID should not be provided during creation.');
         }
-        const { data, error } = await this.supabase.auth.signUp({
+        let startTime = Date.now();
+        const { data, error } = await this.supabase.auth.signInWithPassword({
             email: user.email,
             password: user.password,
         });
+        console.log('supabase data', data);
 
-        if (error) {
-            throw new Error(error.message);
+        if (data.user) {
+            user.id = data.user.id;
+
+        } else {
+            const { data, error } = await this.supabase.auth.admin.createUser({
+                email: user.email,
+                password: user.password,
+                email_confirm: true,
+            });
+            console.log('supabase data2', data);
+
+            if (error) {
+                throw new Error(error.message);
+            }
+            user.id = data.user.id;
         }
-        const id = data.user.id;
-        user.id = id;
+
+
+        let endTime = Date.now();
+        console.log(`Supabase signUp took ${endTime - startTime}ms`);
+
+
+
         user.created_at = new Date();
         user.updated_at = new Date();
         user.deleted_at = null;
-        delete user.password;
 
         // Get all field names and values
-        const fields = Object.keys(user);
-        const values = Object.values(user);
 
-        // Create parameterized query with $1, $2, etc.
-        const placeholders = fields.map((_, i) => `$${i + 1}`).join(', ');
-        const columnNames = fields.join(', ');
 
-        // Insert query that returns the created record
+        // Explicitly write the query
         const query = `
-            INSERT INTO users (${columnNames}) 
-            VALUES (${placeholders})
+            INSERT INTO users (id, email, name, company_id, role, created_at, updated_at, deleted_at) 
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
             RETURNING *
         `;
-
+        const values = [
+            user.id,
+            user.email,
+            user.name,
+            user.company_id,
+            user.role,
+            user.created_at,
+            user.updated_at,
+            user.deleted_at
+        ];
+        startTime = Date.now();
         const result = await this.db.query(query, values);
+        endTime = Date.now();
+        console.log(`query took :  ${endTime - startTime}ms`);
         return result.rows[0] as User;
     }
 
@@ -68,8 +92,9 @@ export class UserRepo {
         // Check if user exists
         const existingUser = await this.getById(id);
         if (!existingUser) {
-            throw new Error('User not found');
+            throw new CustomError({ message: 'User not found.' });
         }
+
 
         // Always update the updated_at timestamp
         userData.updated_at = new Date();

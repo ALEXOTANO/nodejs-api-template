@@ -1,6 +1,6 @@
 import { Services } from '../services/services';
 import { AuthRepo } from './auth.repo';
-import { CompanyRepo } from './companies.repo';
+import { CompanyRepo } from './company.repo';
 import { ContactRepo } from './contacts.repo';
 import { ConversationRepo } from './conversations.repo';
 import { UserRepo } from './users.repo';

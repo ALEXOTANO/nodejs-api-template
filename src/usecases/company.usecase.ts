@@ -1,4 +1,4 @@
-import { CompanyRepo } from '../repositories/companies.repo';
+import { CompanyRepo } from '../repositories/company.repo';
 import { Company } from '../types/entities';
 
 export class CompanyUsecase {

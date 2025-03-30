@@ -31,7 +31,7 @@ export const AuthMiddlewares = (firebaseService: typeof fb, supabaseService: typ
             };
             next();
         } catch (e) {
-            new CustomError({ error: e, messageDetail: 'AuthMiddleware:checkToken' });
+            new CustomError({ error: e, context: 'AuthMiddleware:checkToken' });
             res.status(401).json(new CustomResponse('Unauthorize', '', null));
             return;
         }
@@ -60,7 +60,7 @@ export const AuthMiddlewares = (firebaseService: typeof fb, supabaseService: typ
             next();
 
         } catch (error) {
-            new CustomError({ error, messageDetail: 'AuthMiddleware:checkSupabaseToken' });
+            new CustomError({ error, context: 'AuthMiddleware:checkSupabaseToken' });
             res.status(401).json(new CustomResponse('Invalid supabasetoken', '', null));
             return;
         }
@@ -83,7 +83,7 @@ export const AuthMiddlewares = (firebaseService: typeof fb, supabaseService: typ
 
             next();
         } catch (error) {
-            new CustomError({ error, messageDetail: 'AuthMiddleware:checkFirebaseToken' });
+            new CustomError({ error, context: 'AuthMiddleware:checkFirebaseToken' });
             res.status(401).json(new CustomResponse('Invalid firebasetoken', '', null));
         }
     };

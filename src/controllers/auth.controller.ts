@@ -14,7 +14,7 @@ export class AuthController {
             res.json(signInData);
         } catch (e) {
             throw new CustomError({
-                message: 'AuthController:signIn.',
+                context: 'AuthController:signIn.',
                 error: e,
                 httpResponseCode: 400,
                 httpResponse: res,
@@ -33,7 +33,7 @@ export class AuthController {
             res.json(token);
         } catch (e) {
             throw new CustomError({
-                message: 'AuthController:generateToken.',
+                context: 'AuthController:generateToken.',
                 error: e,
                 httpResponseCode: 400,
                 httpResponse: res,
@@ -44,7 +44,7 @@ export class AuthController {
     createUser = async (req: RequestUserData, res: Response) => {
         try {
             const userData = req.body as Partial<User>;
-            console.log('userData', userData)
+
 
             if (!userData.email || !userData.name) {
                 throw new Error('Email and name are required fields.');
@@ -55,7 +55,7 @@ export class AuthController {
             res.status(201).json(newUser);
         } catch (e) {
             throw new CustomError({
-                message: 'AuthController:createUser.',
+                context: 'AuthController:createUser.',
                 error: e,
                 httpResponseCode: 400,
                 httpResponse: res,

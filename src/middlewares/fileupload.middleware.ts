@@ -83,7 +83,7 @@ export const filesUpload = (req: Request, res: Response, next: NextFunction) => 
         });
 
         busboy.on("error", (e) => {
-            throw new CustomError({message: 'middleware:fileupload:busboy.', error: e as any, httpResponseCode: 400, httpResponse: res })
+            throw new CustomError({ context: 'middleware:fileupload:busboy.', error: e as any, httpResponseCode: 400, httpResponse: res })
         })
         busboy.on("finish", () => {
             Promise.all(fileWrites)
@@ -98,7 +98,7 @@ export const filesUpload = (req: Request, res: Response, next: NextFunction) => 
         busboy.end(req['rawBody']);
 
     } catch (error) {
-        throw new CustomError({message: 'middleware:fileupload.', error, httpResponseCode: 400, httpResponse: res })
+        throw new CustomError({ context: 'middleware:fileupload.', error, httpResponseCode: 400, httpResponse: res })
 
     }
 };

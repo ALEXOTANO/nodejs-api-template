@@ -1,13 +1,14 @@
 import { Response } from 'express';
 import { GraphQLErrorExtensions } from 'graphql';
-
 import { logError } from './error';
 
 export class CustomError extends Error {
+
+    context = '';
     name = 'CustomError';
-    customCode: string = null;
     message = '';
     messageDetail = '';
+
     httpResponse: Response = null;
     httpResponseCode: number;
     extensions: GraphQLErrorExtensions = {};
@@ -20,11 +21,11 @@ export class CustomError extends Error {
             Object.assign(this, args);
             this.extensions = {
                 ...args.extensions,
-                code: this.customCode ?? args.extensions?.code,
+                code: args.extensions?.code,
             };
         }
 
-        this.message = this.message || args.error?.message || '';
+        this.message = `${this.context ? this.context + ' -> ' : ''}` + this.message || args.error?.message || '';
         const messageDetail = (args.error as CustomError)?.messageDetail || args.error?.message || this.message || '';
 
         this.messageDetail = messageDetail
@@ -33,17 +34,17 @@ export class CustomError extends Error {
 
         if (!(args.error instanceof CustomError)) {
             logError({
-                customCode: this.customCode,
                 message: this.message,
                 messageDetail: this.messageDetail,
                 extensions: this.extensions,
-            })
+            });
         }
 
         if (args.httpResponse) {
-            args.httpResponse
-                .status(args.httpResponseCode)
-                .json({ message: this.message, messageDetail: this.messageDetail, code: this.customCode });
+            args.httpResponse.status(args.httpResponseCode).json({
+                messageDetail: this.messageDetail,
+                message: this.message,
+            });
         }
     }
 }

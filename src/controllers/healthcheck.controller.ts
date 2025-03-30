@@ -17,7 +17,7 @@ export class HealthCheckController {
             res.status(200).send(status);
         } catch (e) {
             throw new CustomError({
-                message: 'HealthCheckController:liveness',
+                context: 'HealthCheckController:liveness',
                 error: e,
                 httpResponseCode: 500,
                 httpResponse: res,
