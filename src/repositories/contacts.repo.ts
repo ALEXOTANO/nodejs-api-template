@@ -4,15 +4,22 @@ import { Contact } from '../types/entities';
 export class ContactRepo {
     constructor(private db: PostgresService) { }
 
-    async getAll(): Promise<Contact[]> {
-        const query = 'SELECT * FROM contacts WHERE deleted_at IS NULL';
-        const result = await this.db.query<Contact>(query);
+    async getAll(companyId: string) {
+        const query = 'SELECT * FROM contacts WHERE deleted_at IS NULL AND company_id = $1';
+        const params = [companyId];
+        const result = await this.db.query<Contact>(query, params);
         return result.rows;
     }
 
-    async getById(id: string): Promise<Contact | null> {
-        const query = 'SELECT * FROM contacts WHERE id = $1 AND deleted_at IS NULL';
-        const result = await this.db.query<Contact>(query, [id]);
+    async getByPhoneNumber(phoneNumber: string, companyId: string) {
+        const query = 'SELECT * FROM contacts WHERE phone_number = $1 AND company_id = $2 AND deleted_at IS NULL';
+        const result = await this.db.query<Contact>(query, [phoneNumber, companyId]);
+        return result.rows[0] || null;
+    }
+
+    async getById(id: string, companyId: string) {
+        const query = 'SELECT * FROM contacts WHERE id = $1 AND company_id = $2 AND deleted_at IS NULL';
+        const result = await this.db.query<Contact>(query, [id, companyId]);
         return result.rows[0] || null;
     }
 
@@ -41,7 +48,7 @@ export class ContactRepo {
         return result.rows[0];
     }
 
-    async update(id: string, contact: Partial<Omit<Contact, 'id' | 'created_at' | 'updated_at' | 'deleted_at'>>): Promise<Contact | null> {
+    async update(id: string, contact: Partial<Contact>) {
         const updates: string[] = [];
         const values: any[] = [];
         let paramCounter = 1;
@@ -54,7 +61,7 @@ export class ContactRepo {
 
         updates.push(`updated_at = NOW()`);
 
-        if (updates.length === 0) return this.getById(id);
+        if (updates.length === 0) return this.getById(id, contact.company_id);
 
         values.push(id);
 

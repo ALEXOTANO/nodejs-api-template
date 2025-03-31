@@ -9,5 +9,6 @@ export const ContactsRouter = (
 ) => {
     const contacts = Router();
     contacts.get('/v1/contacts', [authMiddlewares.checkToken], asyncErrorHandler(contactsController.getAll));
+    contacts.get('/v1/contacts/:id', [authMiddlewares.checkToken], asyncErrorHandler(contactsController.getById));
     return contacts;
 };

@@ -14,6 +14,25 @@ export class AuthUsecase {
 
     ) { }
 
+    async loginWithPassword(username: string, password: string) {
+        const userId = await this.authRepo.signInSupabaseWithPassword(username, password)
+
+        const user = await this.userRepo.getById(userId);
+
+        if (!user) {
+            return {
+                user: null,
+                token: null,
+            }
+        }
+
+        const token = await this.authRepo.generateToken(user);
+
+        return {
+            user,
+            token,
+        };
+    };
     async signInWithId(userId: string) {
         const user = await this.userRepo.getById(userId);
 
@@ -24,7 +43,7 @@ export class AuthUsecase {
             }
         }
 
-        const token = await this.authRepo.generateToken(user.id, UserRole.user);
+        const token = await this.authRepo.generateToken(user);
 
         return {
             user,
@@ -32,23 +51,20 @@ export class AuthUsecase {
         };
     }
 
-    async generateToken(userId: string, userType: string) {
-        return this.authRepo.generateToken(userId, userType);
-    }
-
     async createUser(userData: Partial<User & { password: string }>) {
+
         if (!userData.password) {
             throw new Error('Password is required');
         }
+
         // check if the user already exists
         const existingUser = await this.userRepo.getById(userData.id);
         if (existingUser) {
             throw new Error('User already exists');
         }
+
         // check if the user has a company_id and create it if not
         if (!userData.company_id) userData.company_id = crypto.randomUUID();
-
-
 
 
         const userToCreate = {

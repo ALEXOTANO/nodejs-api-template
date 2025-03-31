@@ -7,7 +7,35 @@ import { AuthUsecase } from '../usecases/auth.usecase';
 export class AuthController {
     constructor(private authUsecase: AuthUsecase) { }
 
-    signIn = async (req: RequestUserData, res: Response) => {
+    signInWithPassword = async (req: RequestUserData, res: Response) => {
+        try {
+            // extract userName and password
+            const { username, password } = req.body;
+            if (!username || !password) {
+                throw new Error('Error 1: Either username or password is wrong.');
+            }
+            // check that the user is either a phone number or an email
+            const isPhoneNumber = /^\d+$/.test(username);
+            const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(username);
+            if (!isPhoneNumber && !isEmail) {
+                throw new Error('Error 2: Either username or password is wrong.');
+            }
+            const signInData = await this.authUsecase.loginWithPassword(username, password);
+            if (!signInData) {
+                throw new Error('Error 3: Either userName or password is wrong.');
+            }
+
+            res.json(signInData);
+        } catch (e) {
+            throw new CustomError({
+                context: 'AuthController:signIn.',
+                error: e,
+                httpResponseCode: 400,
+                httpResponse: res,
+            });
+        }
+    }
+    signInWithSupabaseToken = async (req: RequestUserData, res: Response) => {
         try {
             const signInData = await this.authUsecase.signInWithId(req.userData.id);
 

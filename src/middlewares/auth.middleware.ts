@@ -28,6 +28,7 @@ export const AuthMiddlewares = (firebaseService: typeof fb, supabaseService: typ
             req['userData'] = {
                 userId: decodedToken['userId'],
                 userRole: decodedToken['userRole'],
+                companyId: decodedToken['companyId']
             };
             next();
         } catch (e) {

@@ -37,6 +37,6 @@ initModules(api).then(() => {
     console.log('Modules Initialized');
 
     if (process.env.LOCAL) {
-        api.listen(5001, () => console.log('🚀 ~ Listening at port:', 5001));
+        api.listen(5001, '0.0.0.0', () => console.log('🚀 ~ Listening at port:', 5001));
     }
 });

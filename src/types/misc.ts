@@ -12,9 +12,9 @@ export interface GraphQLRequestContext {
     userData: UserData;
 }
 export interface UserData {
-    id: string;
-    email: string;
-    phone: string;
+    userId: string;
+    role: string;
+    companyId: string;
 }
 
 export type TimestampOrString = Timestamp | string | Date;

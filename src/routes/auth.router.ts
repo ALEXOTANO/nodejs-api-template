@@ -9,8 +9,11 @@ export const AuthRouter = (
 ): Router => {
     const router = Router();
 
-    // Route for generating token (login)
-    router.post('/v1/login', [authMiddleware.checkSupabaseToken], asyncErrorHandler(authController.signIn));
+    // Sign in using password and user (email or phone number)
+    router.post('/v1/signin', [], asyncErrorHandler(authController.signInWithPassword));
+
+    // signin with supabase token
+    router.post('/v1/login', [authMiddleware.checkSupabaseToken], asyncErrorHandler(authController.signInWithSupabaseToken));
 
     // Route for creating new users
     router.post('/v1/users', asyncErrorHandler(authController.createUser));
