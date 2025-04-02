@@ -32,5 +32,9 @@ export const ConversationsRouter = (
         [authMiddlewares.checkToken],
         asyncErrorHandler(conversationsController.addMessage)
     );
+    conversations.patch('/v1/conversations/:conversationId/is_active',
+        [authMiddlewares.checkToken],
+        asyncErrorHandler(conversationsController.setAgentIsActiveOnConversation)
+    );
     return conversations;
 };

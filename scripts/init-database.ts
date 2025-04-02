@@ -148,7 +148,8 @@ async function createMessagesTable(client: PoolClient): Promise<void> {
       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
       conversation_id UUID NOT NULL,
       company_id UUID NOT NULL,
-      text TEXT NOT NULL,
+      text TEXT ,
+      error_message TEXT,
       type VARCHAR(20),
       sender VARCHAR(10) NOT NULL CHECK (sender IN ('customer', 'human', 'bot')),
       created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
@@ -322,7 +323,7 @@ async function applySchemaModifications(client: PoolClient): Promise<void> {
     // Define your schema modifications here
     const schemaModifications = [
         // Missing 'role' column in users table
-        { table: 'conversations', column: 'message_count', definition: 'BIGINT' },
+        // { table: 'messages', column: 'error_message', definition: 'TEXT' },
 
         // Ensure any other missing columns are added
         // These would be run on subsequent executions of the script to update existing tables

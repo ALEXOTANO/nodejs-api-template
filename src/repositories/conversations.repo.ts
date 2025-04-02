@@ -4,13 +4,21 @@ import { Conversation } from '../types/entities';
 export class ConversationRepo {
     constructor(private db: PostgresService) { }
     increaseMessageCount(id: string) {
-        const query = 'UPDATE conversations SET message_count = message_count + 1 WHERE id = $1 AND deleted_at IS NULL RETURNING *';
+        const query = 'UPDATE conversations SET message_count = message_count + 1, updated_at = NOW() WHERE id = $1 AND deleted_at IS NULL RETURNING *';
         return this.db.query<Conversation>(query, [id]);
     }
+
+    /**
+     * Activates or deactivate the responses from the agent on the conversation
+     * @param conversation_id 
+     * @param isActive 
+     * @returns 
+     */
+
     async getAllWithContacts(company_id: any) {
         // convert searchParams to SQL query
 
-        const query = `SELECT * FROM conversations AS C INNER JOIN contacts AS CT ON C.contact_id = CT.id WHERE C.deleted_at IS NULL AND C.company_id = $1`;
+        const query = `SELECT *, C.id as id, CT.id as contact_id FROM conversations AS C INNER JOIN contacts AS CT ON C.contact_id = CT.id WHERE C.deleted_at IS NULL AND C.company_id = $1`;
         const result = await this.db.query<Conversation>(query, [company_id]);
         return result.rows;
     }
@@ -54,7 +62,7 @@ export class ConversationRepo {
         return result.rows[0];
     }
 
-    async update(id: string, companyId: string, conversation: Partial<Omit<Conversation, 'id' | 'created_at' | 'updated_at' | 'deleted_at'>>) {
+    async update(id: string, companyId: string, conversation: Partial<Conversation>) {
         const updates: string[] = [];
         const values: any[] = [];
         let paramCounter = 1;
@@ -72,11 +80,11 @@ export class ConversationRepo {
         values.push(id);
 
         const query = `
-      UPDATE conversations 
-      SET ${updates.join(', ')} 
-      WHERE id = $${paramCounter} AND deleted_at IS NULL
-      RETURNING *
-    `;
+        UPDATE conversations 
+        SET ${updates.join(', ')} 
+        WHERE id = $${paramCounter} AND deleted_at IS NULL
+        RETURNING *
+        `;
 
         const result = await this.db.query<Conversation>(query, values);
         return result.rows[0] || null;

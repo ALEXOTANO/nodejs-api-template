@@ -114,10 +114,37 @@ export class ConversationsController {
         }
     };
 
+    setAgentIsActiveOnConversation = async (req: RequestUserData, res: Response) => {
+        try {
+            const { conversationId } = req.params;
+            const { companyId } = req.userData;
+            const { is_active } = req.body;
+            if (!conversationId) {
+                return res.status(400).json({ error: 'Conversation ID is required' });
+            }
+            if (!companyId) {
+                return res.status(400).json({ error: 'Company ID is required' });
+            }
+            if (is_active === undefined) {
+                return res.status(400).json({ error: 'is_active is required' });
+            }
+            const conversation = await this.conversationUsecase.setAgentIsActiveOnConversation(conversationId, companyId, is_active);
+
+            return res.status(200).json(conversation);
+        } catch (e) {
+            throw new CustomError({
+                context: 'ConversationsController:setAgentIsActiveOnConversation.',
+                error: e,
+                httpResponseCode: 400,
+                httpResponse: res,
+            });
+        }
+    }
+
     addMessage = async (req: RequestUserData, res: Response) => {
         const { conversationId } = req.params;
         const { companyId } = req.userData;
-        const { type, text, sender } = req.body as Message;
+        const { type = 'text', text, sender, error_message, id } = req.body as Message;
         try {
             if (!conversationId) {
                 return res.status(400).json({ error: 'Conversation ID is required' });
@@ -132,12 +159,13 @@ export class ConversationsController {
 
             // This is to merge the model from n8n or the one from the API
             const messageData = {
+                id: id,
                 conversation_id: conversationId,
                 company_id: companyId,
                 type,
                 text,
                 sender,
-
+                error_message
             };
 
             const newMessage = await this.conversationUsecase.addMessage(messageData);

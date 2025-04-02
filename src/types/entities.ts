@@ -32,6 +32,7 @@ export class Conversation extends BaseEntity {
     agent_id: string;
     is_active: boolean;
     company_id: string;
+    message_count: number;
 }
 
 export class Message extends BaseEntity {
@@ -40,18 +41,10 @@ export class Message extends BaseEntity {
     text: string;
     type: string; //'text' | 'image' | 'video' | 'audio' | 'file' | 'location' | 'contact' | 'sticker' | 'template';
     sender: MessageSenderType;
+    error_message?: string;
 }
 
 export type MessageSenderType = 'customer' | 'human' | 'ai';
-
-export class MessageContent {
-    type?: 'human' | 'ai';
-    content?: string;
-    tool_calls?: [];
-    additional_kwargs?: {};
-    response_metadata?: {};
-    invalid_tool_calls?: [];
-}
 
 export class User extends BaseEntity {
     company_id: string;
@@ -83,3 +76,18 @@ export enum UserRole {
     admin = 'admin',
     user = 'user'
 }
+
+export type MessageHistory = {
+    id: number;
+    session_id: string;
+    message: {
+        type: "human" | "ai";
+        content: string;
+        additional_kwargs: Record<string, any>;
+        response_metadata: Record<string, any>;
+        tool_calls?: Array<any>;
+        invalid_tool_calls?: Array<any>;
+    };
+    candidate_to_delete_id?: string;
+};
+

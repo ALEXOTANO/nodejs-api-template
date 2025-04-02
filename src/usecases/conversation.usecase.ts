@@ -80,7 +80,16 @@ export class ConversationUsecase {
         if (message.conversation_id) {
             this.conversationRepo.increaseMessageCount(message.conversation_id);
         }
+
         return this.messageRepo.create(message);
+    }
+
+    async setAgentIsActiveOnConversation(id: string, companyId: string, isActive: boolean) {
+        if (isActive) {
+            const allMessages = await this.messageRepo.getByConversationId(id)
+            await this.messageRepo.syncMessagesToChatHistory(allMessages, id);
+        }
+        return this.conversationRepo.update(id, companyId, { is_active: isActive });
     }
 
     async upsert(id: string, companyId: string, conversation: Partial<Conversation>) {
